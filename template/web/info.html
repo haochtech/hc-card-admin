@@ -1,0 +1,372 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li {if $operation=='post'}class="active"{/if}><a href="{php echo $this->createWebUrl('info', array('op' => 'post'))}">{if $id==0}添加信息{else}修改信息{/if}</a></li>
+    <li {if $operation=='display'}class="active"{/if}><a href="{php echo $this->createWebUrl('info', array('op' => 'display'))}">管理信息</a></li>
+</ul>
+{if $operation == 'display'}
+<div class="main">
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form action="./index.php" method="get" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="amouse_wxapp_card" />
+                <input type="hidden" name="do" value="info" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">联系方式</label>
+                    <div class="col-sm-2 col-lg-2">
+                        <input class="form-control" name="mobile" id="" type="text" value="{$_GPC['mobile']}">
+                    </div>
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">姓名</label>
+                    <div class="col-sm-2 col-lg-2">
+                        <input class="form-control" name="linkman"  type="text" value="{$_GPC['linkman']}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 col-lg-2">
+                        <button class="btn btn-default">
+                            <i class="fa fa-search"></i> 搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .page-nav {
+            margin: 0;
+            width: 100%;
+            min-width: 800px;
+        }
+
+        .page-nav > li > a {
+            display: block;
+        }
+
+        .page-nav-tabs {
+            background: #EEE;
+        }
+
+        .page-nav-tabs > li {
+            line-height: 40px;
+            float: left;
+            list-style: none;
+            display: block;
+            text-align: -webkit-match-parent;
+        }
+
+        .page-nav-tabs > li > a {
+            font-size: 14px;
+            color: #666;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 10px;
+            margin: 0;
+            border: 1px solid transparent;
+            border-bottom-width: 0px;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+        }
+
+        .page-nav-tabs > li > a, .page-nav-tabs > li > a:focus {
+            border-radius: 0 !important;
+            background-color: #f9f9f9;
+            color: #999;
+            margin-right: -1px;
+            position: relative;
+            z-index: 11;
+            border-color: #c5d0dc;
+            text-decoration: none;
+        }
+
+        .page-nav-tabs >li >a:hover {
+            background-color: #FFF;
+        }
+
+        .page-nav-tabs > li.active > a, .page-nav-tabs > li.active > a:hover, .page-nav-tabs > li.active > a:focus {
+            color: #576373;
+            border-color: #c5d0dc;
+            border-top: 2px solid #4c8fbd;
+            border-bottom-color: transparent;
+            background-color: #FFF;
+            z-index: 12;
+            margin-top: -1px;
+            box-shadow: 0 -2px 3px 0 rgba(0, 0, 0, 0.15);
+        }
+    </style>
+    <div class="panel panel-default">
+        <form id="form2" class="form-horizontal" method="post">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th style="width:5%;">全选</th>
+                        <th>信息</th>
+                        <th>是否热门</th>
+                        <th>审核状态</th>
+                        <td>发布时间</td>
+                        <th style="text-align:right;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="row-first"> <input type="checkbox"  onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" name=''></td>
+                        <td colspan="8" style="text-align:left;">
+                            <input name="token" type="hidden" value="{$_W['token']}"/>
+                            <input type="submit" class="btn btn-primary" name="submit1" value="批量删除"/>
+                        </td>
+                    </tr>
+                    {loop $list $item}
+                    <tr>
+                        <td> <input type="checkbox" value="{$item['id']}" name="delete[]">  </td>
+                        <td>
+                            <img src="{$item['avater']}" style='width:30px;height:30px;padding:1px;border:1px solid #ccc' />{$item['linkman']}
+                            <br/>
+                            <label class='label label-primary'>{$item['mobile']} </label> <br/>
+                            <label class='label label-default'>浏览量:{$item['views']}</label> <br/>
+                            <label class='label label-primary'>名片ID：{$item['user_id']}</label>
+                        </td>
+                        <td><?php  if($item['hot']==0) { ?>是<?php  } else { ?>否<?php  } ?></td>
+                        <td>
+                            <label title="点击自动切换是否审核" data="{$item['status']}" class='label label-default {if $item['status']==0}label-success{/if}' onclick="setProperty(this,{$item['id']},'status')">{if $item['status']==0}已审核{else if $item['status']==1}待审核{/if}
+                            </label>
+                        </td>
+                        <td><?php  echo date("Y-m-d H:i:s",$item['createtime'])?></td>
+                        <td style="text-align:right;">
+                            <a href="{php echo $this->createWebUrl('info', array('op' => 'post', 'id' => $item['id']))}" title="详情" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="详情" >
+                                <i class="fa fa-edit">编辑</i>
+                            </a>
+                            <a onclick="return confirm('删除订单无法恢复，确认吗？');return false;"
+                               href="{php echo $this->createWebUrl('info', array('op' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm"> <i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+                {$pager}
+            </div>
+        </form>
+    </div>
+    <script>
+        function setProperty(obj, id,type) {
+            $(obj).html($(obj).html() + "...");
+            $.post("{php echo $this->createWebUrl('info',array('op'=>'setstatus','version_id'=>$_GPC['version_id']))}",{id: id,type: type,data: obj.getAttribute("data")},function (d) {
+                $(obj).html($(obj).html().replace("...", ""));
+                $(obj).html(d.data == '0' ? '已审核' : '待审核');
+                $(obj).attr("data", d.data);
+                if (d.result == 1) {
+                    $(obj).toggleClass("label-info");
+                }
+            }, "json");
+        }
+    </script>
+</div>
+{elseif $operation == 'post'}
+<style>
+    .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio]{ margin-left:-25px;}
+    .checkbox label, .radio label{ padding-left:25px;}
+    input[type=checkbox], input[type=radio]{ margin:1px;}
+    input[type=checkbox],input[type=radio]{ position: relative; width: 18px; height:18px; background-clip: border-box; -webkit-appearance: none; -moz-appearance: none; appearance: none; vertical-align:top; border-radius: 2px; -webkit-transition: background-color .25s; transition: background-color .25s; background-color: #fff; border: 1px solid #d7d7d7; }
+    input[type=checkbox]:hover,input[type=radio]:hover{ border:1px solid #09bb07;}
+    input[type=checkbox]:checked:after,input[type=radio]:checked:after{ content: ''; display: block; height: 6px; width: 10px; border: 0 solid #333; border-width: 0 0 2px 2px; -webkit-transform: rotate(-45deg); transform: rotate(-45deg); position: absolute; top: 4px; left: 3px; border-color:#fff;}
+    input[type=checkbox]:checked,input[type=radio]:checked{ color:#fff; background-color: #5cb85c; border-color: #5cb85c; }
+</style>
+<div class="main">
+    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" >
+        <input type="hidden" name="id" value="{$item[id]}">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                名片信息
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">联系人</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="linkman" id="linkman" class="form-control" value="{$item['linkman']}" />
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">关联用户名片</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <select id="user_id" name="user_id" class="form-control" >
+                            {loop $cards $row}
+                            <option value="{$row['id']}"  {if $row['id'] == $item['user_id']} selected="selected"{/if}>{$row['username']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">手机号码</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="tel" name="mobile" id="mobile" class="form-control" value="{$item['mobile']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">类别</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_category_2level('category', $parent, $children, $pcate, $ccate)}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">介绍图片</label>
+                    <div class="col-sm-9 col-xs-12">
+                        {php echo tpl_form_field_multi_image('img',$piclist)}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">审核状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="radio" name="status" value="1" id="form-status-1"  {if $item['status'] == 1}checked="true"{/if}  />
+                        <label for="form-status-1">禁用</label>
+                        <input type="radio" name="status" value="0" id="form-status-0"  {if $item['status'] == 0}checked="true"{/if}  />
+                        <label for="form-status-0">启用</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-2 control-label">是否热门</label>
+                    <div class="col-sm-10">
+                        <label class="radio-inline">
+                            <input type="radio" name="hot" value="0" <?php  if($item['hot']==0 || empty($item['hot'])) { ?>checked<?php  } ?> />是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="hot" value="1" <?php  if($item['hot']==1) { ?>checked<?php  } ?> />否
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">商家详情</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_ueditor('details', $item['details']);}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">浏览量</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="views" id="views" class="form-control" value="{$item['views']}" />
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">经度</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="longitude" name="lng" value="{$item['lng']}">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">纬度</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="latitude" name="lat" value="{$item['lat']}">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <script charset="utf-8" src="//map.qq.com/api/js?v=2.exp"></script>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">地图:</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <input type="text" id="address" name="address" class="form-control" value="{$item['address']}">
+                            <span class="input-group-btn">
+                            <button type="button"  id="mapseacrh" class="btn btn-primary">搜索</button></span>
+                        </div>
+                        <span class="help-block m-b-none"> 地图上选自己公司的位置会自动获取到你的经纬度</span>
+                        <div id="container" style="width:100%;height:300px;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-12">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1"/>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(function(){
+        var geocoder,citylocation,map,marker = null;
+        var markersArray=[];
+        var x=$("#longitude").val();
+        var y=$("#latitude").val();
+        var center = new qq.maps.LatLng(y,x);
+        map = new qq.maps.Map(document.getElementById('container'),{
+            center: center,
+            zoom: 13
+        });
+        geocoder = new qq.maps.Geocoder({
+            complete : function(result){
+                map.setCenter(result.detail.location);
+                var marker = new qq.maps.Marker({
+                    map:map,
+                    position: result.detail.location
+                });
+            }
+        });
+        marker = new qq.maps.Marker({
+            position: new qq.maps.LatLng(y,x),
+            map: map
+        });
+        //获取城市列表接口设置中心点
+        if(y==''||x==''){
+            citylocation = new qq.maps.CityService({
+                complete : function(result){
+                    map.setCenter(result.detail.latLng);
+                }
+            });
+            citylocation.searchLocalCity();
+        }
+
+        geocoder = new qq.maps.Geocoder({
+            complete : function(result){
+                marker.setMap(null);
+                map.setCenter(result.detail.location);
+                marker = new qq.maps.Marker({
+                    map:map,
+                    position: result.detail.location
+                });
+                $("#latitude").attr("value",marker.position.lat);
+                $("#longitude").attr("value",marker.position.lng);
+            }
+        });
+        qq.maps.event.addListener(map, 'click', function(event) {
+            qq.maps.event.addListener(map, 'click', function(event) {
+                marker.setMap(null);
+                $("#longitude").attr("value","");
+                $("#longitude").attr("value",event.latLng.getLng());
+                $("#latitude").attr("value","");
+                $("#latitude").attr("value",event.latLng.getLat());
+                var latLng = new qq.maps.LatLng(event.latLng.getLat(), event.latLng.getLng());
+                marker=new qq.maps.Marker({
+                    position:latLng,
+                    map:map
+                });
+            });
+        });
+        $("#mapseacrh").click(function(){
+            var address =$("#address").val();
+            geocoder.getLocation(address);
+        });
+
+        {if $id>0}
+            var address =$("#address").val();
+            geocoder.getLocation(address);
+        {/if}
+
+            document.onkeydown=function(event){
+                var e = event || window.event || arguments.callee.caller.arguments[0];
+                if(e && e.keyCode==27){ // 按 Esc
+                }
+                if(e && e.keyCode==113){ // 按 F2
+                }
+                if(e && e.keyCode==13){ // enter 键
+                    $("#mapseacrh").click();
+                    return false;
+                }
+            };
+
+        });
+</script>
+{/if}

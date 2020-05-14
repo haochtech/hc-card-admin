@@ -1,0 +1,89 @@
+{template 'common/header'}
+
+<div class="main">
+	<ul class="nav nav-tabs">
+        <li class="active"><a href="{php echo $this->createWebUrl('member',array('op' =>'display'))}">会员管理</a></li>
+	</ul>
+
+	<div style="padding:15px;">
+		<form id="form2" class="form-horizontal" method="post">
+		<table class="table table-hover">
+			<thead class="navbar-inner">
+				<tr>
+					<th style="width:200px;">昵称</th>
+					<th style="width:200px;">openid</th>
+                   <th>头像</th> <th>积分</th>
+					<th>创建时间</th>
+					<th style="text-align:right;">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{loop $list $row}
+				<tr>
+					<td>{$row['nickname']} </td>
+					<td>{$row['openid']} </td>
+                    <td>
+                        <img src="{$row['avatar']}" style="width: 50px;height: 50px;" ></img>
+                    </td>
+					<td>{$row['credit1']}</td>
+					<td>{php echo date('Y-m-d H:i:s', $row['createtime'])}</td>
+					<td>
+                        <a onclick="return confirm('您确定要删除吗？');return false;" href="{php echo $this->createWebUrl('pmember', array('op'=>'del','id'=>$row['id'],'status'=>1))}"
+                           class="btn btn-default btn-sm" title="取消拉黑"><i class="fa fa-unlock"></i>删除
+                        </a>
+						{if $_W['isfounder']}
+						<a class="btn btn-default btn-sm" href="javascript:;" onclick="$('#modal-upCreatetime').find(':input[name=cid]').val('{$row['openid']}')" data-toggle="modal" data-target="#modal-upCreatetime"> <span  class="text-primary fa fa-random">赠送积分</span></a>
+						{/if}
+					</td>
+				</tr>
+				{/loop}
+					<tr>
+
+			</tr>
+			</tbody>
+		</table>
+		{$pager}
+		</form>
+	</div>
+</div>
+
+<div id="modal-upCreatetime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<form class="form-horizontal form" action="{php echo $this->createWebUrl('member',array('op'=>'ajaxUpdateCredits'))}" method="post" enctype="multipart/form-data">
+		<input  type="hidden" name="cid" id="cid">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+					<h4>赠送{if $custom_set['credittxt']}{$custom_set['credittxt']}{else}积分{/if}</h4>
+				</div>
+				<div class="modal-body">
+					<label for="upCreatetimeval" class="control-label">赠送{if $custom_set['credittxt']}{$custom_set['credittxt']}{else}积分{/if}: </label>
+					<div class="input-group">
+						<input type="text" id='credit1' name="credit1" class="form-control" value="10" />
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<input name="token" type="hidden" value="{$_W['token']}"/>
+					<button type="submit" class="btn btn-success col-sm-2" name="submit" value="赠送">
+						<i class="fa fa-check-circle"></i> 赠送
+					</button>
+
+					<a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a>
+				</div>
+
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+    require(['bootstrap'], function ($) {
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+</script>
+{template 'common/footer'}

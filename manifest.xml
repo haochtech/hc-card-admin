@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.zx-app.cn" versionCode="0.8,1.0">
+	<application setting="false">
+		<name><![CDATA[名片小程序]]></name>
+		<identifie><![CDATA[amouse_wxapp_card]]></identifie>
+		<version><![CDATA[1.7.9]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[微名片(小程序版本)]]></ability>
+		<description><![CDATA[微名片 小程序版本]]></description>
+		<author><![CDATA[zxgc]]></author>
+		<url><![CDATA[https://www.zx-app.cn]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+		</handles>
+		<rule embed="false" />
+		<card embed="false" />
+		<supports>
+    			<item type="wxapp" />
+                </supports>
+	</platform>
+	<bindings>
+		<menu>
+			<entry title="行业管理" do="category" state="" direct="false" />
+			<entry title="名片管理" do="cards" state="" direct="false" />
+			<entry title="基本设置" do="sysset" state="" direct="false" />
+			<entry title="海报设置" do="poster" state="" direct="false" />
+			<entry title="幻灯片管理" do="slide" state="" direct="false" />
+			<entry title="会员管理" do="member" state="" direct="false" />
+			<entry title="订单管理" do="orders" state="" direct="false" />
+			<entry title="积分商城" do="credit" state="" direct="false" />
+			<entry title="小程序导航管理" do="navs" state="" direct="false" />
+		</menu>
+		<page>
+			<entry title="首页" do="/amouse_wxapp_card/pages/card/home/home" state="" direct="false" />
+			<entry title="排行榜" do="/amouse_wxapp_card/pages/card/ranking/ranking" state="" direct="false" />
+			<entry title="我的" do="/amouse_wxapp_card/pages/mine/index/index" state="" direct="false" />
+			<entry title="积分商场" do="/amouse_wxapp_card/pages/mine/index/index" state="" direct="false" />
+			<entry title="小程序导航" do="/amouse_wxapp_card/pages/nav/index/index" state="" direct="false" />
+			<entry title="百万曝光" do="/amouse_wxapp_card/pages/cooperation/cooperation" state="" direct="false" />
+			<entry title="名片夹" do="/amouse_wxapp_card/pages/card/holder/holder" state="" direct="false" />
+			<entry title="模板市场" do="/amouse_wxapp_card/pages/templet/templet" state="" direct="false" />
+			<entry title="付费广告" do="/amouse_wxapp_card/pages/cooperation/adv/adv" state="" direct="false" />
+		</page>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[CREATE TABLE IF NOT EXISTS `ims_amouse_tel114_navs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT '0',
+  `displayorder` int(10) unsigned NOT NULL,
+  `title` varchar(1000) DEFAULT '' COMMENT '导航名称',
+  `followurl` varchar(1000) DEFAULT '' COMMENT '网页链接',
+  `thumb` varchar(1000) DEFAULT '' COMMENT '底部图片',
+  `click` tinyint(1) DEFAULT '0' COMMENT '小程序点击类型 0 直接进入小程序 1:弹出小程序二维码',
+  `status` tinyint(1) DEFAULT '0' COMMENT '跳转类型 0:小程序 1:web网页',
+  `recommend` tinyint(1) DEFAULT '1' COMMENT '是否推荐',
+  `bgcolor` varchar(1000) DEFAULT '' COMMENT '背景',
+  `qrcode` varchar(1000) DEFAULT '' COMMENT '小程序二维码',
+  `info` varchar(1000) DEFAULT '' COMMENT '介绍',
+  `appid` varchar(1000) DEFAULT '' COMMENT 'appid',
+  PRIMARY KEY (`id`),
+  KEY `indx_weid` (`uniacid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_ad` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) NOT NULL COMMENT '小程序id',
+  `title` varchar(50) NOT NULL COMMENT '轮播图标题',
+  `logo` varchar(200) NOT NULL COMMENT '图片',
+  `status` int(11) NOT NULL COMMENT '1.开启  2.关闭',
+  `link` varchar(100) NOT NULL COMMENT '链接',
+  `displayorder` int(11) NOT NULL COMMENT '排序',
+  `type` tinyint(2) NOT NULL,
+  `appid` varchar(20) NOT NULL,
+  `app_name` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_card` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) NOT NULL,
+  `categoryId` int(10) NOT NULL DEFAULT '0' COMMENT '分类id',
+  `openid` varchar(255) NOT NULL COMMENT 'openid',
+  `mobile` varchar(18) DEFAULT '' COMMENT '手机号',
+  `username` varchar(100) DEFAULT NULL COMMENT '用户名',
+  `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
+  `weixin` varchar(100) DEFAULT NULL COMMENT '微信号',
+  `company` varchar(100) DEFAULT NULL COMMENT '公司',
+  `job` varchar(100) DEFAULT NULL,
+  `fromId` varchar(100) DEFAULT '',
+  `qq` varchar(100) DEFAULT '',
+  `industry` varchar(100) DEFAULT '',
+  `department` varchar(100) DEFAULT '',
+  `desc` varchar(255) DEFAULT NULL,
+  `imgs` text,
+  `vip` tinyint(1) DEFAULT '0' COMMENT '0:非vip，1vip',
+  `zan` int(10) DEFAULT '0',
+  `clazz` varchar(10) DEFAULT 'default' COMMENT '模板',
+  `view` int(10) DEFAULT '0',
+  `lng` decimal(10,6) DEFAULT '0.000000',
+  `lat` decimal(10,6) DEFAULT '0.000000',
+  `address` varchar(255) DEFAULT NULL COMMENT '地址',
+  `status` tinyint(1) DEFAULT '0' COMMENT '0表示已审核，1表示未审核，2表示禁用',
+  `collect` int(10) DEFAULT '0',
+  `avater` varchar(255) DEFAULT '',
+  `weixinImg` varchar(200) DEFAULT '',
+  `listorder` int(10) DEFAULT '0' COMMENT '排序',
+  `createtime` int(11) DEFAULT NULL,
+  `qrcode` varchar(255) DEFAULT '',
+  `qrcode2` varchar(255) DEFAULT '',
+  `audit_status` tinyint(1) DEFAULT '0' COMMENT '0表示未审核，1表示已审核，2表示禁用',
+  `child_cate_id` int(11) NOT NULL COMMENT '分类二id',
+  PRIMARY KEY (`id`),
+  KEY `indx_weid` (`uniacid`)
+) ENGINE=MyISAM AUTO_INCREMENT=180 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_card_history` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) NOT NULL,
+  `cardid` int(10) NOT NULL,
+  `from_user` varchar(255) NOT NULL COMMENT '自己',
+  `zan_mid` int(10) NOT NULL,
+  `zan_cid` int(10) NOT NULL,
+  `to_user` varchar(255) NOT NULL COMMENT '好友',
+  `sms_type` tinyint(2) NOT NULL COMMENT '0:看，1:赞 2:收藏',
+  `createtime` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `indx_weid` (`uniacid`)
+) ENGINE=MyISAM AUTO_INCREMENT=500 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_card_slide` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属帐号',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `thumb` varchar(255) NOT NULL DEFAULT '',
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `qrcode` varchar(255) DEFAULT NULL COMMENT '小程序码',
+  `click` tinyint(2) NOT NULL DEFAULT '0',
+  `status` tinyint(2) NOT NULL DEFAULT '0',
+  `appid` varchar(255) NOT NULL DEFAULT '',
+  `endtime` int(10) unsigned NOT NULL COMMENT '广告结束时间',
+  `openid` varchar(100) NOT NULL,
+  `isshow` tinyint(2) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `idx_uniacid` (`uniacid`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_category` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属帐号',
+  `name` varchar(50) NOT NULL COMMENT '分类名称',
+  `displayorder` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `thumb` varchar(1024) NOT NULL DEFAULT '' COMMENT '分类图片',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0',
+  `parentid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级分类ID,0为第一级',
+  `type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '0:名片行业，1:同城分类',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_creditshop_goods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT '0',
+  `displayorder` int(11) DEFAULT '0',
+  `title` varchar(255) DEFAULT '',
+  `thumb` text,
+  `price` decimal(10,2) DEFAULT '0.00',
+  `type` tinyint(3) DEFAULT '0',
+  `credit` int(11) DEFAULT '0',
+  `stock` int(11) DEFAULT '0',
+  `credit2` int(11) DEFAULT '0',
+  `money` decimal(10,2) DEFAULT '0.00',
+  `total` int(11) DEFAULT '0',
+  `totalday` int(11) DEFAULT '0',
+  `detail` text,
+  `description` varchar(255) DEFAULT NULL,
+  `status` tinyint(3) DEFAULT '0',
+  `vip` tinyint(3) DEFAULT '0',
+  `istop` tinyint(3) DEFAULT '0',
+  `isrecommand` tinyint(3) DEFAULT '0',
+  `createtime` int(11) DEFAULT '0',
+  `endtime` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `idx_uniacid` (`uniacid`),
+  KEY `idx_endtime` (`endtime`),
+  KEY `idx_createtime` (`createtime`),
+  KEY `idx_status` (`status`),
+  KEY `idx_displayorder` (`displayorder`),
+  KEY `idx_istop` (`istop`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_creditshop_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT '0',
+  `address_phone` varchar(255) DEFAULT '',
+  `address_name` varchar(255) DEFAULT '' COMMENT '收货人',
+  `address` varchar(255) DEFAULT '' COMMENT '收货地址',
+  `openid` varchar(255) DEFAULT '',
+  `goodsid` int(11) DEFAULT '0',
+  `createtime` int(11) DEFAULT '0',
+  `status` tinyint(3) DEFAULT '0' COMMENT '0-未发货 1-已发货 3 取消',
+  `usetime` int(11) DEFAULT '0',
+  `express` varchar(255) DEFAULT '',
+  `expresscom` varchar(255) DEFAULT '',
+  `expresssn` varchar(255) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_member` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) DEFAULT NULL,
+  `realname` varchar(50) DEFAULT NULL,
+  `mobile` varchar(11) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `openid` varchar(255) DEFAULT NULL,
+  `vip` tinyint(1) DEFAULT '0' COMMENT '0vip，1非vip',
+  `sex` tinyint(1) DEFAULT '0' COMMENT '1男，2女',
+  `myattention` varchar(255) DEFAULT NULL,
+  `myfocus` varchar(255) DEFAULT NULL,
+  `createtime` int(11) DEFAULT NULL,
+  `companyAddress` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT '0' COMMENT '0表示已审核，1表示未审核，2表示禁用',
+  `desc` varchar(255) DEFAULT NULL,
+  `avater` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `indx_weid` (`uniacid`)
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_navs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT '0',
+  `displayorder` int(10) unsigned NOT NULL,
+  `title` varchar(1000) DEFAULT '' COMMENT '导航名称',
+  `followurl` varchar(1000) DEFAULT '' COMMENT '网页链接',
+  `thumb` varchar(1000) DEFAULT '' COMMENT '底部图片',
+  `click` tinyint(1) DEFAULT '0' COMMENT '小程序点击类型 0 直接进入小程序 1:弹出小程序二维码',
+  `status` tinyint(1) DEFAULT '0' COMMENT '跳转类型 0:小程序 1:web网页',
+  `recommend` tinyint(1) DEFAULT '1' COMMENT '是否推荐',
+  `bgcolor` varchar(1000) DEFAULT '' COMMENT '背景',
+  `qrcode` varchar(1000) DEFAULT '' COMMENT '小程序二维码',
+  `info` varchar(1000) DEFAULT '' COMMENT '介绍',
+  `appid` varchar(1000) DEFAULT '' COMMENT 'appid',
+  PRIMARY KEY (`id`),
+  KEY `indx_weid` (`uniacid`)
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_order` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) NOT NULL,
+  `ordersn` varchar(255) NOT NULL COMMENT '订单号',
+  `openid` varchar(255) NOT NULL COMMENT 'openid',
+  `paytype` tinyint(2) NOT NULL COMMENT '1：置顶',
+  `house_id` int(10) NOT NULL,
+  `transid` varchar(20) NOT NULL,
+  `formid` varchar(50) NOT NULL COMMENT '推送码',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '-1取消状态，0普通状态，1为已付款，2为成功',
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '入驻金额',
+  `top_day` int(10) NOT NULL DEFAULT '0' COMMENT '置顶天数',
+  `createtime` int(11) NOT NULL,
+  `module` varchar(255) NOT NULL,
+  `prepay_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `indx_weid` (`uniacid`)
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_sms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT '0',
+  `total` int(11) DEFAULT '0',
+  `code` varchar(255) DEFAULT '' COMMENT '验证码code',
+  `mobile` varchar(50) NOT NULL DEFAULT '手机号',
+  `status` tinyint(2) NOT NULL COMMENT '0未使用，1使用',
+  `createtime` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `indx_weid` (`uniacid`)
+) ENGINE=MyISAM AUTO_INCREMENT=172 DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_sysset` (
+  `id` int(11) NOT NULL,
+  `uniacid` int(11) DEFAULT '0',
+  `mobile_verify_status` tinyint(1) DEFAULT '1' COMMENT '短信验证码',
+  `logo` varchar(255) DEFAULT NULL,
+  `copyright` varchar(255) DEFAULT '' COMMENT '版权',
+  `systel` varchar(255) DEFAULT '' COMMENT '联系电话',
+  `enable` tinyint(2) NOT NULL DEFAULT '1' COMMENT '是否官方客服',
+  `isshare` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否开启分享',
+  `iscreate` tinyint(2) NOT NULL DEFAULT '1' COMMENT '是否开启生成图片',
+  `sms_user` varchar(50) NOT NULL DEFAULT '',
+  `enter_price` int(10) NOT NULL DEFAULT '0' COMMENT '入驻金额',
+  `sms_secret` varchar(80) NOT NULL,
+  `sms_type` tinyint(2) NOT NULL COMMENT '0阿里大于老接口，1新接口',
+  `sms_template_code` text NOT NULL COMMENT '短信模板Code',
+  `sms_free_sign_name` text NOT NULL COMMENT '阿里大鱼短信签名',
+  `reg_sms_code` varchar(50) NOT NULL,
+  `qqmap_ak` varchar(500) NOT NULL DEFAULT '',
+  `share_title` varchar(500) NOT NULL DEFAULT '',
+  `share_desc` varchar(500) NOT NULL DEFAULT '',
+  `share_thumb` varchar(500) NOT NULL DEFAULT '',
+  `public_status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '是否开启分享',
+  `baidu_ak` varchar(500) NOT NULL DEFAULT '' COMMENT '是否官方客服',
+  `public_price` int(10) NOT NULL DEFAULT '0' COMMENT '入驻金额',
+  `top_price` int(10) NOT NULL DEFAULT '0' COMMENT '入驻金额',
+  `collect_tpl` varchar(255) DEFAULT NULL COMMENT '名片新增收藏模板通知',
+  `zan_tpl` varchar(255) DEFAULT NULL COMMENT '名片新增点赞模板通知',
+  `save_tpl` varchar(255) DEFAULT NULL COMMENT '名片保存模板通知',
+  `is_public` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否审核',
+  `wxapp_name1` varchar(255) NOT NULL DEFAULT '' COMMENT '分享',
+  `wxapp_url1` varchar(255) NOT NULL DEFAULT '' COMMENT '分享',
+  `wxapp_name2` varchar(255) NOT NULL DEFAULT '' COMMENT '分享',
+  `wxapp_url2` varchar(255) NOT NULL DEFAULT '' COMMENT '分享',
+  `is_style` tinyint(2) NOT NULL DEFAULT '0' COMMENT '风格',
+  `is_close_shop` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否关闭门店',
+  `rule` longtext NOT NULL,
+  `show_top` tinyint(2) NOT NULL DEFAULT '0' COMMENT '开启',
+  `is_pay_public` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支付成功免审核',
+  `is_shield` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否屏蔽电话号码',
+  `check` tinyint(2) NOT NULL DEFAULT '0' COMMENT '分享',
+  `aduit_tpl` varchar(255) NOT NULL DEFAULT '' COMMENT '审核模板',
+  `is_custom` tinyint(2) NOT NULL DEFAULT '0' COMMENT '客户定制页面',
+  `public_credit` int(10) NOT NULL DEFAULT '0' COMMENT '发布积分',
+  `share_credit` int(10) NOT NULL COMMENT '分享积分',
+  `pay_credit` int(10) NOT NULL DEFAULT '0' COMMENT '支付积分',
+  `isrent` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否开启求购求租',
+  `appname` varchar(50) NOT NULL COMMENT '置顶信息',
+  `appid` varchar(50) NOT NULL COMMENT '置顶信息',
+  `limit_credit` int(10) NOT NULL DEFAULT '0' COMMENT '每日限制积分',
+  `bgcolor` varchar(25) NOT NULL COMMENT '置顶信息',
+  `indexname` varchar(25) NOT NULL COMMENT '置顶信息',
+  `notice_sms_code` varchar(100) NOT NULL COMMENT '短信通知模板code',
+  `mp` varchar(500) NOT NULL COMMENT '公众号图片',
+  `sets` longtext COMMENT '后增字段',
+  `adv_day` int(10) DEFAULT '7' COMMENT '广告',
+  `exchange` tinyint(1) NOT NULL DEFAULT '0' COMMENT '开启分享会员',
+  `isenable` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否官方客服',
+  `amap_key` varchar(50) DEFAULT NULL COMMENT '高德地图',
+  `total_num` int(10) NOT NULL DEFAULT '100' COMMENT '浏览量'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_amouse_wxapp_tplcode` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT '0',
+  `code` varchar(255) DEFAULT '' COMMENT '推送码',
+  `openid` varchar(50) NOT NULL DEFAULT 'openid',
+  `status` tinyint(2) NOT NULL COMMENT '0未使用，1使用',
+  `createtime` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `indx_weid` (`uniacid`)
+) ENGINE=MyISAM AUTO_INCREMENT=885 DEFAULT CHARSET=utf8;
+]]></install>
+	<uninstall><![CDATA[DROP TABLE IF EXISTS `ims_amouse_tel114_navs`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_ad`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_card`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_card_history`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_card_slide`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_category`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_creditshop_goods`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_creditshop_log`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_member`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_navs`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_order`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_sms`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_sysset`;
+DROP TABLE IF EXISTS `ims_amouse_wxapp_tplcode`;
+]]></uninstall>
+	<upgrade><![CDATA[upgrade.php]]></upgrade>
+</manifest>
